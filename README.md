@@ -1,1 +1,1 @@
-This is the messeging App specifically made for ViPra!
+This is the messaging App specifically made for ViPra!

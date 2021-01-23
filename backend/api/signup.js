@@ -1,8 +1,10 @@
 
 class SignUp {
 
-	constructor(dbHelper) {
+	constructor(dbHelper, helper, constants) {
 		this.Users = dbHelper.Users;
+		this.helper = helper;
+		this.constants = constants;
 	}
 
 	/**
@@ -13,28 +15,24 @@ class SignUp {
 	 */
 	async handleRequest(req, res) {
 		const input = { ...req.body };
+		const password = this.helper.encryptWithAES(input.password, this.constants.PASSPHASE)
 		const user = {
 			"userName": input.userName,
 			"email": input.email,
-			"password": input.password,
+			"password": password,
 			"phoneNumber": input.phoneNumber,
 			"status": input.status
 		}
 		try{
 			const insertId = await this.Users.signup(user);
-			return this.writeResponse(null, { statusCode: 200, response: { userId: insertId, userName: user.userName } }, res);
+			if(insertId){
+				return this.helper.writeResponse(null, { statusCode: 200, response: { userId: insertId, userName: user.userName } }, res)
+			}else {
+				return this.helper.writeResponse(null, { statusCode: 400, response: { message: 'userName already exists!, try with another userName' } }, res)
+			}
 		}catch (error) {
-			return this.writeResponse(error, { errorCode: error.code}, res);
+			return this.helper.writeResponse(error, { errorCode: error.code}, res);
 		}
-	}
-
-	writeResponse(err, data, res) {
-		if (err) {
-			res.status(err.code ? err.code : 400);
-			return res.send(err);
-		}
-		res.status(200);
-		return res.json(data);
 	}
 }
 

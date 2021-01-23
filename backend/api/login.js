@@ -1,8 +1,10 @@
 
 class LogIn {
 
-	constructor(dbHelper) {
+	constructor(dbHelper, helper, constants) {
 		this.Users = dbHelper.Users;
+		this.helper = helper;
+		this.constants = constants;
 	}
 
 	/**
@@ -15,20 +17,16 @@ class LogIn {
 		const userName = req.body.userName;
 		const password = req.body.password;
 		try{
-			const user = await this.Users.login(userName, password);
-			return this.writeResponse(null, { statusCode: 200, response: {  access: 'yes', userId: user._id }  }, res);
+			const user = await this.Users.login(userName);
+			const dbPassword = this.helper.decryptWithAES(user.password, this.constants.PASSPHASE);
+			if (dbPassword === password ){
+				return this.helper.writeResponse(null, { statusCode: 200, response: {  access: 'yes', userId: user._id }  }, res);
+			}else {
+				return this.helper.writeResponse(null, { statusCode: 400, response: {  message: 'Incorrect Credentials!, try again!' } }, res);
+			}
 		}catch (error) {
-			return this.writeResponse(error, { errorCode: error.code,  response: { access: 'no'} }, res);
+			return this.helper.writeResponse(error, { errorCode: error.code,  response: { access: 'no'} }, res);
 		}
-	}
-
-	writeResponse(err, data, res) {
-		if (err) {
-			res.status(err.code ? err.code : 400);
-			return res.send(err);
-		}
-		res.status(200);
-		return res.json(data);
 	}
 }
 

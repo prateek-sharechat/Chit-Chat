@@ -26,5 +26,8 @@
     "lodash": "^4.17.20",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.12"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }

@@ -1,5 +1,6 @@
-const { dbHelper } = require('./db-helper.js');
+const {db, Users} = require('./db-helper.js');
 
 module.exports = {
-	dbHelper
+	db,
+	Users
 };

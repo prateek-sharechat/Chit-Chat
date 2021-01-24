@@ -37,13 +37,10 @@ const server = (container) => {
 			return res.status(500).send(`Something went wrong!, err: ${err}`);
 		});
 
+
 		app.use((req, res, next) => {
 			req.container = container.createScope();
 			next();
-		});
-
-		app.get('/health', (req, res) => {
-			res.status(200).send('Hello From Chit-Chat Service!');
 		});
 
 		app.use('/', router);

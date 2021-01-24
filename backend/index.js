@@ -1,9 +1,12 @@
 const container = require('./di');
 const server = require('./server');
+const bodyParser = require("body-parser")
+const mongo = require('../backend/driver/db-helper')
 
-server(container).then((app) => {
+server(container).then(async (app) => {
 	const config = container.resolve('serverConfig');
-
+	const mongo = container.resolve('dbHelper');
+	await mongo.init();
 	const { port, keepAliveTimeout } = config;
 	if (!port) {
 		console.log('Port not found, Please check server-config.js');

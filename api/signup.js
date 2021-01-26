@@ -15,7 +15,7 @@ class SignUp {
 	 */
 	async handleRequest(req, res) {
 		const input = { ...req.body };
-		const password = this.helper.encryptWithAES(input.password, this.constants.PASSPHASE)
+		const password = this.helper.encryptWithAES(input.password, this.constants.PASSPHASE);
 		const user = {
 			"userName": input.userName,
 			"email": input.email,

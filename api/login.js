@@ -14,8 +14,8 @@ class LogIn {
 	 * @returns {Promise<*>}
 	 */
 	async handleRequest(req, res) {
-		const userName = req.body.userName;
-		const password = req.body.password;
+		const userName = req.query.userName;
+		const password = req.query.password;
 		try{
 			const user = await this.Users.login(userName);
 			const dbPassword = this.helper.decryptWithAES(user.password, this.constants.PASSPHASE);

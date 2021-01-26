@@ -22,7 +22,7 @@ class LogIn {
 			if (dbPassword === password ){
 				return this.helper.writeResponse(null, { statusCode: 200, response: {  access: 'yes', userId: user._id }  }, res);
 			}else {
-				return this.helper.writeResponse(null, { statusCode: 400, response: {  message: 'Incorrect Credentials!, try again!' } }, res);
+				return this.helper.writeResponse(null, { statusCode: 400, response: { access: 'no', message: 'Incorrect Credentials!, try again!' } }, res);
 			}
 		}catch (error) {
 			return this.helper.writeResponse(error, { errorCode: error.code,  response: { access: 'no'} }, res);
